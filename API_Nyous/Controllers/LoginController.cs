@@ -7,6 +7,7 @@ using System.Text;
 using System.Threading.Tasks;
 using API_Nyous.Contexts;
 using API_Nyous.Domains;
+using API_Nyous.Utils;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
@@ -31,6 +32,8 @@ namespace API_Nyous.Controllers
 
         private Usuario AuthenticateUser(Usuario login)
         {
+            login.Senha = Crypto.Criptografar(login.Senha, login.Email.Substring(0, 4));
+
             return _context.Usuario.Include(a => a.IdAcessoNavigation).FirstOrDefault(u => u.Email == login.Email && u.Senha == login.Senha);
         }
 
